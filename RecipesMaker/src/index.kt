@@ -1,3 +1,7 @@
+import model.Ingredient
+import model.InexactIngredient
+import model.Recipe
+
 fun main() {
 
 //      DECLARACIONES
@@ -8,7 +12,7 @@ fun main() {
     val ver = 2
     val salir = 3
 
-//Strings:
+//Mensajes:
     val inicio = "\n:: Bienvenido a Recipes Maker ::\n"
 
     val opciones: String = """
@@ -21,17 +25,6 @@ fun main() {
     val nombre: String = "Escribe el nombre de tu receta (Ejemplo: Papas Fritas): " +
             "\nO escribe V para VOLVER al menú principal"
 
-    val a = "Agua"
-    val l = "Leche"
-    val c = "Carne"
-    val v = "Verduras"
-    val f = "Frutas"
-    val ce = "Cereal"
-    val h = "Huevos"
-    val ac = "Aceite"
-
-    val ingredientes = listOf(a, l, c, v, f, ce, h, ac)
-
     val add = "Escribe el número del ingrediente que quieres añadir:"
 
     val guardado = "Dato guardado correctamente"
@@ -41,27 +34,173 @@ fun main() {
     val addOtro = "Escribe A para añadir otro ingrediente a tu receta" +
             "\nEscribe G para guardar y volver al menu"
 
+    val unidadDeMedida = "UNIDAD DE MEDIDA. Ejemplo: Litros, Kilogramos, Unidades, etc."
+
+    val cantidad = "CANTIDAD. Solo en números enteros. Ejemplo: 2, 3, etc"
+
+    //Ingredientes predeterminados
+
+    val ingredientes = arrayOf("Agua", "Leche", "Carnes", "Verduras", "Frutas", "Cereales", "Huevos", "Aceite")
+
+    val listaDeCarnes = arrayOf("Cerdo", "Pollo", "Res", "Pescado")
+
+    val listaDeVerduras = arrayOf("Papa", "Zanahoria", "Lechuga", "Tomate", "Cebolla", "Ajo", "Pimenton")
+
+    val listaDeFrutas = arrayOf("Fresa", "Plátano", "Uvas", "Manzana","Naranja","Pera","Cereza")
+
+    val listaDeCereales = arrayOf("Arroz","Maiz", "Avena", "Trigo")
+
+    //Inicio
+
     var situacion:Int? = menu
 
-    val recetas = mutableListOf("\tRECETAS: \n")
+
+    val recetas = arrayListOf("\t\t\tRECETAS: \n")
+
 
 //      ACCIONES
 
-    fun viewRecipes(){
-        println(recetas)
+    fun viewMessage(message:String){
+        println(message)
     }
+
+    fun addLiquid(name:String, i:String): String {
+        viewMessage(unidadDeMedida)
+        val unit:String? = readLine()
+
+        viewMessage(cantidad)
+        val volumen:Int? = readLine()?.toInt()
+
+        val liquid = InexactIngredient(name, volumen, unit)
+        return i + liquid.toString()
+    }
+
+    fun addSolid(name:String, i:String): String{
+        var pos = 1
+        var especific = "Empty"
+
+        when(name){
+
+            ingredientes[2] ->  {
+                for (c in listaDeCarnes){
+                    println("$pos $c")
+                    pos = pos.inc()
+                }
+
+                viewMessage("\n$add")
+                val responseA:String? = readLine()
+
+                when(responseA?.toInt()){
+                    1 -> especific = listaDeCarnes[0]
+                    2 -> especific = listaDeCarnes[1]
+                    3 -> especific = listaDeCarnes[2]
+                    4 -> especific = listaDeCarnes[3]
+                    else -> viewMessage(ingresa)
+                }
+
+            }
+
+            ingredientes[3] ->  {
+                for (c in listaDeVerduras){
+                    println("$pos $c")
+                    pos = pos.inc()
+                }
+
+                viewMessage("\n$add")
+                val responseA:String? = readLine()
+
+                when(responseA?.toInt()){
+                    1 -> especific = listaDeVerduras[0]
+                    2 -> especific = listaDeVerduras[1]
+                    3 -> especific = listaDeVerduras[2]
+                    4 -> especific = listaDeVerduras[3]
+                    5 -> especific = listaDeVerduras[4]
+                    6 -> especific = listaDeVerduras[5]
+                    7 -> especific = listaDeVerduras[6]
+                    else -> viewMessage(ingresa)
+                }
+            }
+            ingredientes[4] ->  {
+                for (c in listaDeFrutas){
+                    println("$pos $c")
+                    pos = pos.inc()
+                }
+
+                viewMessage("\n$add")
+                val responseA:String? = readLine()
+
+                when(responseA?.toInt()){
+                    1 -> especific = listaDeFrutas[0]
+                    2 -> especific = listaDeFrutas[1]
+                    3 -> especific = listaDeFrutas[2]
+                    4 -> especific = listaDeFrutas[3]
+                    5 -> especific = listaDeFrutas[4]
+                    6 -> especific = listaDeFrutas[5]
+                    7 -> especific = listaDeFrutas[6]
+                    else -> viewMessage(ingresa)
+                }
+            }
+            ingredientes[5] ->  {
+                for (c in listaDeCereales){
+                    println("$pos $c")
+                    pos = pos.inc()
+                }
+
+                viewMessage("\n$add")
+                val responseA:String? = readLine()
+
+                when(responseA?.toInt()){
+                    1 -> especific = listaDeCereales[0]
+                    2 -> especific = listaDeCereales[1]
+                    3 -> especific = listaDeCereales[2]
+                    4 -> especific = listaDeCereales[3]
+                    else -> viewMessage(ingresa)
+                }
+            }
+        }
+
+        viewMessage(unidadDeMedida)
+        val unit:String? = readLine()
+
+        viewMessage(cantidad)
+        val volumen:Int? = readLine()?.toInt()
+
+        val solid = InexactIngredient(especific, volumen, unit)
+        return i + solid.toString()
+    }
+
+    fun addIndividualElements(name:String, i:String) : String {
+        viewMessage(cantidad)
+        val cantidad:Int? = readLine()?.toInt()
+
+        val element = Ingredient(name, cantidad)
+        return i + element.toString()
+    }
+
+    fun viewRecipes() {
+        for (x in recetas) {
+            println(x)
+        }
+    }
+
+    var final = ""
 
     fun makeRecipe(){
         var ingrediente = true
 
-        println (nombre)
+        viewMessage (nombre)
+
+        val receta = Recipe()
 
         when (val name:String? = readLine()) {
             "V" -> situacion = menu
-            else -> recetas.add("\n\n$name: \n")
+            else -> {
+                receta.name = "$name"
+            }
+
         }
 
-        println(guardado)
+        viewMessage(guardado)
 
         ingredientes@ while (ingrediente) {
 
@@ -72,34 +211,37 @@ fun main() {
                 posicion = posicion.inc()
             }
 
-            println("\n$add")
+            viewMessage("\n$add")
             val responseI:String? = readLine()
 
             when (responseI?.toInt()) {
-                1 -> recetas.add("- $a -")
-                2 -> recetas.add("- $l -")
-                3 -> recetas.add("- $c -")
-                4 -> recetas.add("- $v -")
-                5 -> recetas.add("- $f -")
-                6 -> recetas.add("- $ce -")
-                7 -> recetas.add("- $h -")
-                8 -> recetas.add("- $ac -")
-                else -> println(ingresa)
+                1 -> final = addLiquid(ingredientes[0], final)
+                2 -> final = addLiquid(ingredientes[1], final)
+                3 -> final = addSolid(ingredientes[2], final)
+                4 -> final = addSolid(ingredientes[3], final)
+                5 -> final = addSolid(ingredientes[4], final)
+                6 -> final = addSolid(ingredientes[5], final)
+                7 -> final = addIndividualElements(ingredientes[6], final)
+                8 -> final = addLiquid(ingredientes[7], final)
+                else -> viewMessage(ingresa)
             }
 
-            println (guardado)
-            println(addOtro)
+            viewMessage (guardado)
+            viewMessage(addOtro)
 
             val responseO:String? = readLine()
 
             if(responseO == "A"){
                 continue@ingredientes
             } else if(responseO == "G"){
-                println(recetas)
+                receta.setIngredient(final)
+                final = ""
+                recetas.add(receta.toString())
+                viewRecipes()
                 ingrediente = false
             } else {
-                println(ingresa)
-                println(recetas)
+                viewMessage(ingresa)
+                viewRecipes()
                 continue@ingredientes
             }
 
@@ -108,8 +250,8 @@ fun main() {
 
 principal@  while (!(situacion?.equals(salir) ?: (false))) {
 
-                println(inicio)
-                println(opciones)
+                viewMessage(inicio)
+                viewMessage(opciones)
 
                 val response:String? = readLine()
                 situacion = response?.toInt()
@@ -122,7 +264,7 @@ principal@  while (!(situacion?.equals(salir) ?: (false))) {
                     viewRecipes()
                 } else{
 
-                    println(ingresa)
+                    viewMessage(ingresa)
                     continue@principal
 
                 }
